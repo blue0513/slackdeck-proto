@@ -4,12 +4,14 @@
 
 ## Setup
 
-1. You need to install electron
-2. You should edit the SlackURL for web in `index.html` (ex: "https://blue0513-private-room.slack.com")
+1. Install Electron
+2. Rename `setting.json.sample` to `settings.json`
+3. Edit the SlackURL for web in `setting.json` (ex: "https://blue0513-private-room.slack.com")
 
 ## Usage
 
 ```sh
-$ cd slackdeck-proto
 $ electron .
 ```
+
+Then you should login your slack-workspace.
