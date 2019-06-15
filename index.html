@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SlackDeck-Proto</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <div class="small-tab">
+      <div class="webview">
+        <webview id="full-contents" src="your_url" />
+      </div>
+    </div>
+
+    <div class="middle-tab">
+      <div class="webview">
+        <webview id="no-channel-contents" src="your_url" />
+      </div>
+    </div>
+    <div class="middle-tab">
+      <div class="webview">
+        <webview id="no-channel-contents" src="your_url" />
+      </div>
+    </div>
+    <div class="middle-tab">
+      <div class="webview">
+        <webview id="no-channel-contents" src="your_url" />
+      </div>
+    </div>
+
+    <div class="small-tab">
+      <div class="webview">
+        <webview id="full-contents" src="your_url" />
+      </div>
+    </div>
+
+    <script>
+      const webviews = document.querySelectorAll("[id^='no-channel-contents']");
+      webviews.forEach(function(webview) {
+          webview.addEventListener('dom-ready', function() {
+              webview.insertCSS(".client_channels_list_container { display: none !important; }");
+          });
+      });
+    </script>
+
+  </body>
+</html>
