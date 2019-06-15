@@ -52,7 +52,9 @@
           return webview.id == "full-contents";
       }
       function checkUrlIsSet(webview, url) {
-          return webview.attributes.src.value == url;
+          const webviewUrl = new URL(webview.attributes.src.value);
+          const settingsUrl = new URL(url);
+          return webviewUrl.origin == settingsUrl.origin;
       }
       function loadURL(webview, url) {
           webview.loadURL(url);
