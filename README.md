@@ -4,8 +4,8 @@
 
 ## Setup
 
-1. You need install electron
-2. You should edit the SlackURL for web in `index.html`
+1. You need to install electron
+2. You should edit the SlackURL for web in `index.html` (ex: "https://blue0513-private-room.slack.com")
 
 ## Usage
 
