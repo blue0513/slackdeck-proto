@@ -6,31 +6,43 @@ body{
     margin:0;padding:0;
     height:100%;
 }
-#no-channel-contents{
-    height: 100%;
-    overflow:scroll;
+#wrapper{
+    width:100%;
+    height:100%;
 }
-#full-contents{
+.horizontal-list{
+    overflow-x: auto;
+    white-space: nowrap;
     height: 100%;
-    overflow:scroll;
+    margin: 0;
+    padding: 0;
+    font-size:0;
 }
-.middle-tab{
-    display: flex;
-    float: left;
-    overflow: scroll;
+#body-only{
     height: 100%;
-    width: 23%;
+}
+#channel-only{
+    height: 100%;
+}
+#sidebar-only{
+    height: 100%;
+}
+.large-tab{
+    display: inline-block;
+    height: 100%;
+    width: 30%;
     border: solid;
+    border-width: thin;
 }
 .small-tab{
-    display: flex;
-    float: left;
-    overflow: scroll;
+    display: inline-block;
     height: 100%;
-    width: 14%;
+    width: 10%;
     border: solid;
+    border-width: thin;
 }
 .webview{
     height: 100%;
-    min-width: 500px;
+    width: 100%;
+    max-width: 100%;
 }

@@ -5,59 +5,87 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-
-    <div class="small-tab">
-      <div class="webview">
-        <webview id="full-contents" src="about:blank" />
-      </div>
-    </div>
-
-    <div class="middle-tab">
-      <div class="webview">
-        <webview id="no-channel-contents" src="about:blank" />
-      </div>
-    </div>
-
-    <div class="middle-tab">
-      <div class="webview">
-        <webview id="no-channel-contents" src="about:blank" />
-      </div>
-    </div>
-
-    <div class="middle-tab">
-      <div class="webview">
-        <webview id="no-channel-contents" src="about:blank" />
-      </div>
-    </div>
-
-    <div class="small-tab">
-      <div class="webview">
-        <webview id="full-contents" src="about:blank" />
-      </div>
+    <div id="wrapper">
+      <ul class="horizontal-list">
+        <!-- will create divs -->
+      </ul>
     </div>
 
     <script>
       const json = require('./settings.json');
-      const css =".client_channels_list_container { display: none !important; } #client_header { display: none !important; }";
-      const webviews = Array.from(document.getElementsByTagName("webview"));
+      const { shell } = require('electron')
 
+      const contents = json.contents;
+      contents.forEach(function(content) {
+          createDiv(content['style'], content['width']);
+      });
+
+      const onlyBodyCss =
+            ".client_channels_list_container { display: none !important; } #client_header { display: none !important; } #col_messages { width 100% !important; }";
+      const onlyChannelCss =
+            ".client_main_container { display: none !important; }";
+      const onlySidebarCss =
+            ".client_channels_list_container { display: none !important; } #col_messages { display: none !important; } .messages_header { display: none !important; }";
+
+      const webviews = Array.from(document.getElementsByTagName("webview"));
       webviews.forEach(function(webview, index) {
+          registerToOpenUrl(webview, shell);
+
           webview.addEventListener('dom-ready', function() {
+              setWebviewAutosize(webview, 'on');
+
               if (checkUrlIsDefault(webview)) {
-                  const channel = json.channels[index];
+                  const channel = contents[index]['channel'];
                   const channelUrl = setChannelUrl(json.url, channel);
                   loadURL(webview, channelUrl);
               }
-              if (!shouldkRenderFullContents(webview)) { applyCss(webview, css); }
+
+              selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss });
           });
       });
 
+      function createDiv(style, width) {
+          var div = document.createElement('div');
+          div.className = width;
+
+          var divWebview = document.createElement('div');
+          divWebview.className = 'webview';
+
+          var webview = document.createElement('webview');
+          webview.src = 'about:blank';
+          webview.id = style;
+
+          divWebview.appendChild(webview);
+          div.appendChild(divWebview);
+
+          var root = document.getElementsByClassName("horizontal-list")[0];
+          root.appendChild(div);
+      }
+      function setWebviewAutosize(webview, autosize) {
+          webview.autosize = autosize;
+      }
+      function selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss }) {
+          if (shouldRenderOnlyBody(webview)) { applyCss(webview, onlyBodyCss); }
+          if (shouldRenderOnlyChannelList(webview)) { applyCss(webview, onlyChannelCss); }
+          if (shouldRenderOnlySidebar(webview)) { applyCss(webview, onlySidebarCss); }
+      }
+      function registerToOpenUrl(webview, shell) {
+          webview.addEventListener('new-window', function(e){
+              shell.openExternal(e.url);
+          });
+      }
       function setChannelUrl(baseUrl, channel) {
           const url = "messages/" + channel;
           return new URL(url, baseUrl).href.toString();
       }
-      function shouldkRenderFullContents(webview) {
-          return webview.id == "full-contents";
+      function shouldRenderOnlyChannelList(webview) {
+          return webview.id == "channel-only";
+      }
+      function shouldRenderOnlyBody(webview) {
+          return webview.id == "body-only";
+      }
+      function shouldRenderOnlySidebar(webview) {
+          return webview.id == "sidebar-only";
       }
       function checkUrlIsDefault(webview) {
           return webview.attributes.src.value == "about:blank";
