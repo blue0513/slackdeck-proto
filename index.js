@@ -13,13 +13,17 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 600,
-    transparent: false,
-    frame:       true,
-    resizable:   true,
-    hasShadow:   false,
-    alwaysOnTop: false
+    webPreferences: {
+      width: 1000,
+      height: 600,
+      transparent: false,
+      frame:       true,
+      resizable:   true,
+      hasShadow:   false,
+      alwaysOnTop: false,
+      nodeIntegration: true,
+      webviewTag: true
+    }
   });
   mainWindow.loadURL('file://' + __dirname + '/index.html');
 
