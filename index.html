@@ -41,13 +41,21 @@
       const css = ".client_channels_list_container { display: none !important; }";
       const webviews = Array.from(document.getElementsByTagName("webview"));
 
-      webviews.forEach(function(webview) {
+      webviews.forEach(function(webview, index) {
           webview.addEventListener('dom-ready', function() {
-              if (checkUrlIsDefault(webview)) { loadURL(webview, json.url); }
+              if (checkUrlIsDefault(webview)) {
+                  const channel = json.channels[index];
+                  const channelUrl = setChannelUrl(json.url, channel);
+                  loadURL(webview, channelUrl);
+              }
               if (!shouldkRenderFullContents(webview)) { applyCss(webview, css); }
           });
       });
 
+      function setChannelUrl(baseUrl, channel) {
+          const url = "messages/" + channel;
+          return new URL(url, baseUrl).href.toString();
+      }
       function shouldkRenderFullContents(webview) {
           return webview.id == "full-contents";
       }
@@ -55,7 +63,7 @@
           return webview.attributes.src.value == "about:blank";
       }
       function loadURL(webview, url) {
-          webview.loadURL(url);
+          webview.loadURL(url.toString());
       }
       function applyCss(webview, css) {
           webview.insertCSS(css);
