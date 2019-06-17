@@ -38,7 +38,7 @@
 
     <script>
       const json = require('./settings.json');
-      const css = ".client_channels_list_container { display: none !important; }";
+      const css =".client_channels_list_container { display: none !important; } #client_header { display: none !important; }";
       const webviews = Array.from(document.getElementsByTagName("webview"));
 
       webviews.forEach(function(webview, index) {
