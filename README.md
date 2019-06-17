@@ -7,6 +7,7 @@
 1. Install Electron
 2. Rename `setting.json.sample` to `settings.json`
 3. Edit the SlackURL for web in `setting.json` (ex: "https://blue0513-private-room.slack.com")
+4. Edit the default channels to open
 
 ## Usage
 

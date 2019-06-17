@@ -1,3 +1,10 @@
 {
-"url": "https://example.com/"
+    "url": "https://example.com/",
+    "channels": [
+        "general",
+        "random",
+        "channel1",
+        "channel2",
+        "channel3"
+    ]
 }
