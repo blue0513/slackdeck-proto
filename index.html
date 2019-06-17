@@ -43,7 +43,7 @@
 
       webviews.forEach(function(webview) {
           webview.addEventListener('dom-ready', function() {
-              if (!checkUrlIsSet(webview, json.url)) { loadURL(webview, json.url); }
+              if (checkUrlIsDefault(webview)) { loadURL(webview, json.url); }
               if (!shouldkRenderFullContents(webview)) { applyCss(webview, css); }
           });
       });
@@ -51,10 +51,8 @@
       function shouldkRenderFullContents(webview) {
           return webview.id == "full-contents";
       }
-      function checkUrlIsSet(webview, url) {
-          const webviewUrl = new URL(webview.attributes.src.value);
-          const settingsUrl = new URL(url);
-          return webviewUrl.origin == settingsUrl.origin;
+      function checkUrlIsDefault(webview) {
+          return webview.attributes.src.value == "about:blank";
       }
       function loadURL(webview, url) {
           webview.loadURL(url);
