@@ -7,6 +7,7 @@
   <body>
     <div id="wrapper">
       <ul class="horizontal-list">
+        <!-- <div id="menu-bar"> <button onclick="opendev();">Open Dev Tool</button> </div> -->
         <!-- will create divs -->
       </ul>
     </div>
@@ -16,8 +17,8 @@
       const { shell } = require('electron')
 
       const contents = json.contents;
-      contents.forEach(function(content) {
-          createDiv(content['style'], content['width']);
+      contents.forEach(function(content, index) {
+          createDiv(content['style'], content['width'], index);
       });
 
       const onlyBodyCss =
@@ -32,6 +33,12 @@
           registerToOpenUrl(webview, shell);
 
           webview.addEventListener('dom-ready', function() {
+
+              // webview.getWebContents().on('before-input-event', (event, input) => {
+              //     if (input.type !== 'keyDown') { return; }
+              //     if(input.key === "Backspace" && webview.canGoBack()) { webview.goBack(); }
+              // });
+
               setWebviewAutosize(webview, 'on');
 
               if (checkUrlIsDefault(webview)) {
@@ -44,9 +51,57 @@
           });
       });
 
-      function createDiv(style, width) {
+      function opendev() {
+          const webviews = Array.from(document.getElementsByTagName("webview"));
+          var webview = webviews[1];
+          webview.goBack();
+          webview.openDevTools();
+      }
+      function reload(index) {
+          const targetTab = document.getElementById(index);
+          var webview = null;
+          targetTab.children[0].childNodes.forEach(function(element) {
+              if(element.tagName == "WEBVIEW") { webview = element; }
+          });
+          webview.reload();
+      }
+      function remove(index) {
+          var targetTab = document.getElementById(index);
+          targetTab.parentNode.removeChild(targetTab);
+      }
+      function add() {
+          const style = "body-only";
+          const width = "large-tab";
+          const channel = "general";
+          const index = Array.from(document.getElementsByTagName("webview")).length;
+
+          createDiv(style, width, index);
+
+          var webview = Array.from(document.getElementsByTagName("webview"))[index];
+          registerToOpenUrl(webview, shell);
+
+          webview.addEventListener('dom-ready', function() {
+              setWebviewAutosize(webview, 'on');
+
+              if (checkUrlIsDefault(webview)) {
+                  const channelUrl = setChannelUrl(json.url, channel);
+                  loadURL(webview, channelUrl);
+              }
+
+              // Hack: These CSS are global objects
+              selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss });
+          });
+      }
+      function createDiv(style, width, index) {
           var div = document.createElement('div');
+          div.id = index;
           div.className = width;
+
+          var divTest = document.createElement('div');
+          divTest.className = 'hoge';
+          divTest.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
+          divTest.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
+          divTest.innerHTML += '<button onclick=add();>Add Column</button>';
 
           var divWebview = document.createElement('div');
           divWebview.className = 'webview';
@@ -55,6 +110,7 @@
           webview.src = 'about:blank';
           webview.id = style;
 
+          divWebview.appendChild(divTest);
           divWebview.appendChild(webview);
           div.appendChild(divWebview);
 
@@ -96,7 +152,7 @@
       function applyCss(webview, css) {
           webview.insertCSS(css);
       }
-    </script>
+      </script>
 
   </body>
 </html>
