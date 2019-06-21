@@ -42,7 +42,20 @@ body{
     border-width: thin;
 }
 .webview{
-    height: 100%;
+    height: 97%;
     width: 100%;
     max-width: 100%;
+}
+.tab-tool-bar {
+    width: 100%;
+    height: 3%;
+}
+#menu-bar{
+    width:100%;
+    padding:5px;
+    max-height:30px;
+    background-color:#EFF0EE;
+    color:#959595;
+    display:block;
+    white-space: nowrap;
 }
