@@ -39,7 +39,7 @@
           setWebviewAutosize(webview, 'on');
 
           if (checkUrlIsDefault(webview)) {
-              const channelUrl = setChannelUrl(json.url, channel);
+              const channelUrl = getChannelUrl(json.url, channel);
               loadURL(webview, channelUrl);
           }
 
@@ -71,20 +71,20 @@
       }
       function opendev() {
           const webviews = getWebviews();
-          var webview = webviews[1];
+          let webview = webviews[1];
           webview.goBack();
           webview.openDevTools();
       }
       function reload(index) {
           const targetTab = document.getElementById(index);
-          var webview = null;
+          let webview = null;
           targetTab.children[0].childNodes.forEach(function(element) {
               if(element.tagName == "WEBVIEW") { webview = element; }
           });
           webview.reload();
       }
       function remove(index) {
-          var targetTab = document.getElementById(index);
+          let targetTab = document.getElementById(index);
           targetTab.parentNode.removeChild(targetTab);
       }
       function add() {
@@ -94,7 +94,7 @@
           const index = getWebviews().length;
           initializeDiv(style, width, index);
 
-          var webview = getWebviews()[index];
+          let webview = getWebviews()[index];
           webview.addEventListener('dom-ready', function() {
               initializeWebview(webview, channel);
           });
@@ -105,27 +105,43 @@
           div.innerHTML += '<button onclick=add();>Add Column</button>';
       }
       function initializeDiv(style, width, index) {
-          var div = document.createElement('div');
-          div.id = index;
-          div.className = width;
+          let divContainer = createContainerDiv(index, width);
+          let divTabToolBar = createToolBarDiv();
+          let divWebview = createWebviewDiv();
+          let webview = createWebview(style);
+          let root = getRootElement();
 
-          var divTabToolBar = document.createElement('div');
-          divTabToolBar.className = 'tab-tool-bar';
-          addButtons(divTabToolBar, index);
-
-          var divWebview = document.createElement('div');
-          divWebview.className = 'webview';
-
-          var webview = document.createElement('webview');
-          webview.src = 'about:blank';
-          webview.id = style;
-
+          root.appendChild(divContainer);
+          divContainer.appendChild(divWebview);
           divWebview.appendChild(divTabToolBar);
           divWebview.appendChild(webview);
-          div.appendChild(divWebview);
 
-          var root = document.getElementsByClassName("horizontal-list")[0];
-          root.appendChild(div);
+          addButtons(divTabToolBar, index);
+      }
+      function getRootElement() {
+          return document.getElementsByClassName("horizontal-list")[0];
+      }
+      function createContainerDiv(index, width) {
+          let div = document.createElement('div');
+          div.id = index;
+          div.className = width;
+          return div;
+      }
+      function createToolBarDiv() {
+          let divTabToolBar = document.createElement('div');
+          divTabToolBar.className = 'tab-tool-bar';
+          return divTabToolBar;
+      }
+      function createWebviewDiv() {
+          let divWebview = document.createElement('div');
+          divWebview.className = 'webview';
+          return divWebview;
+      }
+      function createWebview(style) {
+          let webview = document.createElement('webview');
+          webview.src = 'about:blank';
+          webview.id = style;
+          return webview;
       }
       function setWebviewAutosize(webview, autosize) {
           webview.autosize = autosize;
@@ -140,7 +156,7 @@
               shell.openExternal(e.url);
           });
       }
-      function setChannelUrl(baseUrl, channel) {
+      function getChannelUrl(baseUrl, channel) {
           const url = "messages/" + channel;
           return new URL(url, baseUrl).href.toString();
       }
