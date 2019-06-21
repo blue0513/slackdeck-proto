@@ -6,53 +6,71 @@
   </head>
   <body>
     <div id="wrapper">
+      <!-- <div id="menu-bar"> <button onclick="opendev();">Open Dev Tool</button> </div> -->
       <ul class="horizontal-list">
-        <!-- <div id="menu-bar"> <button onclick="opendev();">Open Dev Tool</button> </div> -->
         <!-- will create divs -->
       </ul>
     </div>
 
     <script>
+      // global variables
       const json = require('./settings.json');
       const { shell } = require('electron')
-
       const contents = json.contents;
+
+      // create div elements
       contents.forEach(function(content, index) {
-          createDiv(content['style'], content['width'], index);
+          initializeDiv(content['style'], content['width'], index);
       });
 
-      const onlyBodyCss =
-            ".client_channels_list_container { display: none !important; } #client_header { display: none !important; } #col_messages { width 100% !important; }";
-      const onlyChannelCss =
-            ".client_main_container { display: none !important; }";
-      const onlySidebarCss =
-            ".client_channels_list_container { display: none !important; } #col_messages { display: none !important; } .messages_header { display: none !important; }";
-
-      const webviews = Array.from(document.getElementsByTagName("webview"));
+      // create webviews in div
+      const webviews = getWebviews();
       webviews.forEach(function(webview, index) {
-          registerToOpenUrl(webview, shell);
-
           webview.addEventListener('dom-ready', function() {
-
-              // webview.getWebContents().on('before-input-event', (event, input) => {
-              //     if (input.type !== 'keyDown') { return; }
-              //     if(input.key === "Backspace" && webview.canGoBack()) { webview.goBack(); }
-              // });
-
-              setWebviewAutosize(webview, 'on');
-
-              if (checkUrlIsDefault(webview)) {
-                  const channel = contents[index]['channel'];
-                  const channelUrl = setChannelUrl(json.url, channel);
-                  loadURL(webview, channelUrl);
-              }
-
-              selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss });
+              initializeWebview(webview, contents[index]['channel']);
           });
       });
 
+      function getWebviews() {
+          return Array.from(document.getElementsByTagName("webview"));
+      }
+      function initializeWebview(webview, channel) {
+          registerToOpenUrl(webview, shell);
+          setWebviewAutosize(webview, 'on');
+
+          if (checkUrlIsDefault(webview)) {
+              const channelUrl = setChannelUrl(json.url, channel);
+              loadURL(webview, channelUrl);
+          }
+
+          const onlyBodyCss = getOnlyBodyCss();
+          const onlyChannelCss = getOnlyChannelCss();
+          const onlySidebarCss = getOnlySidebarCss();
+          selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss });
+      }
+      function getOnlySidebarCss() {
+          const disableChannelList = '.client_channels_list_container { display: none !important; }';
+          const disableBody = '#col_messages { display: none !important; }';
+          const disableHeader = '.messages_header { display: none !important; }';
+          return disableChannelList + disableBody + disableHeader;
+      }
+      function getOnlyChannelCss() {
+          const disableBody = '.client_main_container { display: none !important; }';
+          return disableBody;
+      }
+      function getOnlyBodyCss() {
+          const disableChannelList = '.client_channels_list_container { display: none !important; }';
+          const disableHeader = '#client_header { display: none !important; }';
+          const widenBody = '#col_messages { width 100% !important; }';
+          return disableChannelList + disableHeader + widenBody;
+      }
+      function addKeyEvnet(webview) {
+          webview.getWebContents().on('before-input-event', (event, input) => {
+              if(input.key === "Backspace" && webview.canGoBack()) { webview.goBack(); }
+          });
+      }
       function opendev() {
-          const webviews = Array.from(document.getElementsByTagName("webview"));
+          const webviews = getWebviews();
           var webview = webviews[1];
           webview.goBack();
           webview.openDevTools();
@@ -73,35 +91,27 @@
           const style = "body-only";
           const width = "large-tab";
           const channel = "general";
-          const index = Array.from(document.getElementsByTagName("webview")).length;
+          const index = getWebviews().length;
+          initializeDiv(style, width, index);
 
-          createDiv(style, width, index);
-
-          var webview = Array.from(document.getElementsByTagName("webview"))[index];
-          registerToOpenUrl(webview, shell);
-
+          var webview = getWebviews()[index];
           webview.addEventListener('dom-ready', function() {
-              setWebviewAutosize(webview, 'on');
-
-              if (checkUrlIsDefault(webview)) {
-                  const channelUrl = setChannelUrl(json.url, channel);
-                  loadURL(webview, channelUrl);
-              }
-
-              // Hack: These CSS are global objects
-              selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss });
+              initializeWebview(webview, channel);
           });
       }
-      function createDiv(style, width, index) {
+      function addButtons(div, index) {
+          div.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
+          div.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
+          div.innerHTML += '<button onclick=add();>Add Column</button>';
+      }
+      function initializeDiv(style, width, index) {
           var div = document.createElement('div');
           div.id = index;
           div.className = width;
 
-          var divTest = document.createElement('div');
-          divTest.className = 'hoge';
-          divTest.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
-          divTest.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
-          divTest.innerHTML += '<button onclick=add();>Add Column</button>';
+          var divTabToolBar = document.createElement('div');
+          divTabToolBar.className = 'tab-tool-bar';
+          addButtons(divTabToolBar, index);
 
           var divWebview = document.createElement('div');
           divWebview.className = 'webview';
@@ -110,7 +120,7 @@
           webview.src = 'about:blank';
           webview.id = style;
 
-          divWebview.appendChild(divTest);
+          divWebview.appendChild(divTabToolBar);
           divWebview.appendChild(webview);
           div.appendChild(divWebview);
 
