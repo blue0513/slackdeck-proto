@@ -1,18 +1,47 @@
 # SlackDeck Proto
 
-[![Image from Gyazo](https://i.gyazo.com/b2b397b48f93d1d8638f21fec85bbfc0.png)](https://gyazo.com/b2b397b48f93d1d8638f21fec85bbfc0)
+This provides the Slack viewer that looks like Tweetedeck.
 
-## Setup
+[![Image from Gyazo](https://i.gyazo.com/0613980a28e63cfcb3a3a194c6d48875.gif)](https://gyazo.com/0613980a28e63cfcb3a3a194c6d48875)
 
-1. Install Electron
-2. Rename `setting.json.sample` to `settings.json`
-3. Edit the SlackURL for web in `setting.json` (ex: "https://blue0513-private-room.slack.com")
-4. Edit the default channels to open
+NOTE: As this is a prototype, we do destructive changes from time to time
 
-## Usage
+## Requirements
 
-```sh
-$ electron .
-```
++ Slack Account
++ Electron: `v5.x` or above
 
-Then you should login your slack-workspace.
+## Quick Start
+
+1. Install [electron](https://electronjs.org/docs/tutorial/installation)
+2. Rename `settings.json.sample` to `settings.json`
+3. Edit `url` value in `settings.json` like `https://your-private.slack.com/`
+4. Run `electron .` in terminal
+
+## Customize
+
+`settings.json` includes all the your settings. 
+You can edit these variables bellow.
+
++ **url**: Slack's Web URL like `https://your-private.slack.com/`
++ **channel**: Channel' name like `general`
++ **style**: CSS style for each column
+  + `channel-only`: only channel's list showing up
+  + `body-only`: only messages showing up
+  + `sidebar-only`: only sidebar (contains Threads, Activity etc)  showing up
++ **width**: Width of each column
+  + `small-tab`: recommend to use with `channel-only` or `sidebar-only`
+  + `large-tab`: recomment to use with `body-only`
+
+## Tips on Use
+
++ Messages overflow the column
+  + use `Cmd + -` to make the font smallers
++ Channel Switch
+  + use `Cmd + k` to switch channels
+  + NOTE: even the style is `channel-only`, you can't switch channels by pushing buttons
+
+## Contribute
+
+You can use [issues](https://github.com/blue0513/slackdeck-proto/issues) as you like.
+Not only suggestions but also questions are welcome!
