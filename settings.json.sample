@@ -1,10 +1,25 @@
 {
-    "url": "https://example.com/",
+    "url": "https://your-slack.slack.com/",
     "channels": [
-        "general",
-        "random",
-        "channel1",
-        "channel2",
-        "channel3"
+        {
+            "channel": "general",
+            "style": "channel-only",
+            "width": "small-tab"
+        },
+        {
+            "channel": "general",
+            "style": "body-only",
+            "width": "large-tab"
+        },
+        {
+            "channel": "random",
+            "style": "body-only",
+            "width": "large-tab"
+        },
+        {
+            "channel": "general",
+            "style": "sidebar-only",
+            "width": "small-tab"
+        }
     ]
 }
