@@ -1,12 +1,19 @@
 // global variables
 const json = require('./settings.json');
-const { shell } = require('electron')
+const menuModule = require('./menu');
+
+const { shell } = require('electron');
 const contents = json.contents;
+var { remote } = require('electron')
+var { isMac, app, Menu, MenuItem } = remote;
 
 // initialize function
 initialize();
 
 function initialize() {
+  // create menu bar
+  initializeMenu(menuModule.menuTemplate);
+
   // create div elements
   contents.forEach(function(content, index) {
     initializeDiv(content['style'], content['width'], index);
@@ -19,6 +26,46 @@ function initialize() {
       initializeWebview(webview, contents[index]['channel']);
     });
   });
+}
+function initializeMenu(template) {
+  let menu = Menu.buildFromTemplate(template);
+  if (hasMultipleWorkspaces()) {
+    const menuItemForWorkspaces = generateMenuItemForWorkspaces();
+    menu.append(menuItemForWorkspaces);
+  }
+  Menu.setApplicationMenu(menu);
+}
+function hasMultipleWorkspaces () {
+  return json.other_urls
+}
+function generateMenuItemForWorkspaces() {
+  const menuItem = new MenuItem(
+    { id: 'workspaces', label: 'Workspaces', submenu: [] }
+  );
+  const nameAndUrls = getOtherWorkspacesInfo(json.other_urls);
+  const otherWorkspacesMenuItems = generateOtherWorkspaceMenuItems(nameAndUrls);
+
+  otherWorkspacesMenuItems.forEach(function(owsMenuItem) {
+    menuItem.submenu.append(owsMenuItem);
+  });
+  return menuItem;
+}
+function generateOtherWorkspaceMenuItems(nameAndUrls) {
+  const otherWorkspacesMenuItems = nameAndUrls.map(function(nameAndUrl) {
+    return new MenuItem({
+        label: nameAndUrl['name'],
+        click(){ loadWorkspace(nameAndUrl['url']); }
+      });
+  });
+
+  return otherWorkspacesMenuItems;
+}
+function getOtherWorkspacesInfo(other_urls) {
+  const nameAndUrls = other_urls.map(function(url) {
+    const workspaceName = new URL(url).hostname.replace(/.slack.com/g, "");
+    return {'name': workspaceName, 'url': new URL(url)};
+  });
+  return nameAndUrls;
 }
 function getWebviews() {
   return Array.from(document.getElementsByTagName("webview"));
@@ -36,6 +83,17 @@ function initializeWebview(webview, channel) {
   const onlyChannelCss = getOnlyChannelCss();
   const onlySidebarCss = getOnlySidebarCss();
   selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss });
+}
+// TODO: integrate with `initializeWebview`
+function initializeWebviewForAnotherWorkspace(webview, workspaceUrl) {
+  registerToOpenUrl(webview, shell);
+  setWebviewAutosize(webview, 'on');
+
+  if (checkUrlIsDefault(webview)) {
+    const channel = 'general';
+    const url = getChannelUrl(workspaceUrl, channel);
+    loadURL(webview, url);
+  }
 }
 function getOnlySidebarCss() {
   const disableChannelList = '.client_channels_list_container { display: none !important; }';
@@ -86,6 +144,17 @@ function add() {
   let webview = getWebviews()[index];
   webview.addEventListener('dom-ready', function() {
     initializeWebview(webview, channel);
+  });
+}
+function loadWorkspace(workspaceUrl) {
+  const style = "full-view";
+  const width = "large-tab";
+  const index = getWebviews().length;
+  initializeDiv(style, width, index);
+
+  const webview = getWebviews()[index];
+  webview.addEventListener('dom-ready', function() {
+    initializeWebviewForAnotherWorkspace(webview, workspaceUrl);
   });
 }
 function addButtons(div, index) {
