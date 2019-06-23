@@ -1,6 +1,6 @@
 {
     "url": "https://your-slack.slack.com/",
-    "channels": [
+    "contents": [
         {
             "channel": "general",
             "style": "channel-only",
