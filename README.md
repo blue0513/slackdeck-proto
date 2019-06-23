@@ -13,14 +13,14 @@ NOTE: As this is a prototype, we do destructive changes from time to time
 
 ## Quick Start
 
-1. Install [electron](https://electronjs.org/docs/tutorial/installation)
+1. Run `npm install` to install packages
 2. Rename `settings.json.sample` to `settings.json`
 3. Edit `url` value in `settings.json` like `https://your-private.slack.com/`
-4. Run `electron .` in terminal
+4. Run `npm start` in terminal
 
 ## Customize
 
-`settings.json` includes all the your settings. 
+`settings.json` includes all the your settings.
 You can edit these variables bellow.
 
 + **url**: Slack's Web URL like `https://your-private.slack.com/`
