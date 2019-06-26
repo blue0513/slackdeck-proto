@@ -31,6 +31,7 @@ body{
     display: inline-block;
     height: 100%;
     width: 30%;
+    min-width: 600px;
     border: solid;
     border-width: thin;
 }
@@ -38,6 +39,7 @@ body{
     display: inline-block;
     height: 100%;
     width: 10%;
+    min-width: 200px;
     border: solid;
     border-width: thin;
 }
