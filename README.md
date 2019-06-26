@@ -1,6 +1,6 @@
 # SlackDeck Proto
 
-This provides the Slack viewer that looks like Tweetedeck.
+This provides the Slack viewer that looks like TweetDeck.
 
 [![Image from Gyazo](https://i.gyazo.com/0613980a28e63cfcb3a3a194c6d48875.gif)](https://gyazo.com/0613980a28e63cfcb3a3a194c6d48875)
 
@@ -32,7 +32,7 @@ You can edit these variables bellow.
   + `sidebar-only`: only sidebar (contains Threads, Activity etc)  showing up
 + **width**: Width of each column
   + `small-tab`: recommend to use with `channel-only` or `sidebar-only`
-  + `large-tab`: recomment to use with `body-only`
+  + `large-tab`: recommend to use with `body-only`
 
 ## Tips on Use
 
