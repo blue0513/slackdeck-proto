@@ -24,6 +24,7 @@ NOTE: As this is a prototype, we do destructive changes from time to time
 You can edit these variables bellow.
 
 + **url**: Slack's Web URL like `https://your-private.slack.com/`
++ **other_urls**: Other workspaces' URL
 + **channel**: Channel' name like `general`
 + **style**: CSS style for each column
   + `channel-only`: only channel's list showing up
@@ -40,6 +41,8 @@ You can edit these variables bellow.
 + Channel Switch
   + use `Cmd + k` to switch channels
   + NOTE: even the style is `channel-only`, you can't switch channels by pushing buttons
++ Add other workspaces in columns
+  + select the workspace in `Workspaces` on menu bar
 
 ## Contribute
 
