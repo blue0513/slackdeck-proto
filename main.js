@@ -71,6 +71,7 @@ function getWebviews() {
   return Array.from(document.getElementsByTagName("webview"));
 }
 function initializeWebview(webview, channel) {
+  addKeyEvents(webview);
   registerToOpenUrl(webview, shell);
   setWebviewAutosize(webview, 'on');
 
@@ -86,6 +87,7 @@ function initializeWebview(webview, channel) {
 }
 // TODO: integrate with `initializeWebview`
 function initializeWebviewForAnotherWorkspace(webview, workspaceUrl) {
+  addKeyEvents(webview);
   registerToOpenUrl(webview, shell);
   setWebviewAutosize(webview, 'on');
 
@@ -111,9 +113,11 @@ function getOnlyBodyCss() {
   const widenBody = '#col_messages { width 100% !important; }';
   return disableChannelList + disableHeader + widenBody;
 }
-function addKeyEvnet(webview) {
+function addKeyEvents(webview) {
   webview.getWebContents().on('before-input-event', (event, input) => {
-    if(input.key === "Backspace" && webview.canGoBack()) { webview.goBack(); }
+    if(input.meta && input.key === '[' && webview.canGoBack()) { webview.goBack(); }
+    // NOTE: canGoForward() and goForward() do not work somewhy....
+    if(input.meta && input.key === ']' && webview.canGoForward()) { webview.goForward(); }
   });
 }
 function opendev() {
