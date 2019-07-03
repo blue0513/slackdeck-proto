@@ -1,6 +1,7 @@
 // global variables
 const json = require('./settings.json');
 const menuModule = require('./menu');
+let uniqueIndex = 0;
 
 const { shell } = require('electron');
 const contents = json.contents;
@@ -34,6 +35,12 @@ function initializeMenu(template) {
     menu.append(menuItemForWorkspaces);
   }
   Menu.setApplicationMenu(menu);
+}
+function incrementUniqueIndex() {
+  uniqueIndex += 1;
+}
+function getUniqueIndex() {
+  return uniqueIndex;
 }
 function hasMultipleWorkspaces () {
   return json.other_urls
@@ -69,6 +76,9 @@ function getOtherWorkspacesInfo(other_urls) {
 }
 function getWebviews() {
   return Array.from(document.getElementsByTagName("webview"));
+}
+function getNumberOfWebviews() {
+  return getWebviews().length;
 }
 function initializeWebview(webview, channel) {
   registerToOpenUrl(webview, shell);
@@ -138,10 +148,10 @@ function add() {
   const style = "body-only";
   const width = "large-tab";
   const channel = "general";
-  const index = getWebviews().length;
+  const index = getUniqueIndex();
   initializeDiv(style, width, index);
 
-  let webview = getWebviews()[index];
+  const webview = getWebviews()[getNumberOfWebviews() - 1];
   webview.addEventListener('dom-ready', function() {
     initializeWebview(webview, channel);
   });
@@ -149,10 +159,10 @@ function add() {
 function loadWorkspace(workspaceUrl) {
   const style = "full-view";
   const width = "large-tab";
-  const index = getWebviews().length;
+  const index = getUniqueIndex();
   initializeDiv(style, width, index);
 
-  const webview = getWebviews()[index];
+  const webview = getWebviews()[getNumberOfWebviews() - 1];
   webview.addEventListener('dom-ready', function() {
     initializeWebviewForAnotherWorkspace(webview, workspaceUrl);
   });
@@ -163,7 +173,14 @@ function addButtons(div, index) {
   div.innerHTML += '<button onclick=add();>Add Column</button>';
 }
 function initializeDiv(style, width, index) {
-  let divContainer = createContainerDiv(index, width);
+  const generatedDivs = generateTab(width, style);
+  addButtons(generatedDivs['divTabToolBar'], getUniqueIndex());
+
+  // update unique index
+  incrementUniqueIndex();
+}
+function generateTab(width, style) {
+  let divContainer = createContainerDiv(getUniqueIndex(), width);
   let divTabToolBar = createToolBarDiv();
   let divWebview = createWebviewDiv();
   let webview = createWebview(style);
@@ -174,7 +191,11 @@ function initializeDiv(style, width, index) {
   divWebview.appendChild(divTabToolBar);
   divWebview.appendChild(webview);
 
-  addButtons(divTabToolBar, index);
+  return {
+    divContainer: divContainer,
+    divTabToolBar: divTabToolBar,
+    divWebview: divWebview
+  };
 }
 function getRootElement() {
   return document.getElementsByClassName("horizontal-list")[0];
