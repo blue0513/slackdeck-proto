@@ -16,7 +16,13 @@ body{
     height: 100%;
     margin: 0;
     padding: 0;
-    font-size:0;
+}
+.tab-tool-bar-button{
+    display: inline-block;
+}
+.tab-tool-bar-channel{
+    display: inline-block;
+    margin-left: 10px;
 }
 #full-view{
     height: 100%;

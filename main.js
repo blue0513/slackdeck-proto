@@ -1,10 +1,11 @@
 // global variables
 const json = require('./settings.json');
 const menuModule = require('./menu');
+const contents = json.contents;
+const defaultChannel = 'general';
 let uniqueIndex = 0;
 
 const { shell } = require('electron');
-const contents = json.contents;
 var { remote } = require('electron')
 var { isMac, app, Menu, MenuItem } = remote;
 
@@ -25,6 +26,10 @@ function initialize() {
   webviews.forEach(function(webview, index) {
     webview.addEventListener('dom-ready', function() {
       initializeWebview(webview, contents[index]['channel']);
+    });
+    webview.addEventListener('page-title-updated', function() {
+      const channelName = getChannelName(webview);
+      updateChannelNameIfNeeded(channelName, index);
     });
   });
 }
@@ -74,6 +79,16 @@ function getOtherWorkspacesInfo(other_urls) {
   });
   return nameAndUrls;
 }
+function getChannelNameFromTitle(webview) {
+  const pageTitle = webview.getTitle();
+  const titleElements = pageTitle.split(' ');
+
+  if (titleElements.length == 4) return titleElements[0];
+  return null;
+}
+function getChannelName(webview) {
+  return getChannelNameFromTitle(webview);
+}
 function getWebviews() {
   return Array.from(document.getElementsByTagName("webview"));
 }
@@ -100,7 +115,7 @@ function initializeWebviewForAnotherWorkspace(webview, workspaceUrl) {
   setWebviewAutosize(webview, 'on');
 
   if (checkUrlIsDefault(webview)) {
-    const channel = 'general';
+    const channel = defaultChannel;
     const url = getChannelUrl(workspaceUrl, channel);
     loadURL(webview, url);
   }
@@ -147,7 +162,7 @@ function remove(index) {
 function add() {
   const style = "body-only";
   const width = "large-tab";
-  const channel = "general";
+  const channel = defaultChannel;
   const index = getUniqueIndex();
   initializeDiv(style, width, index);
 
@@ -155,6 +170,21 @@ function add() {
   webview.addEventListener('dom-ready', function() {
     initializeWebview(webview, channel);
   });
+  webview.addEventListener('page-title-updated', function() {
+    const channelName = getChannelName(webview);
+    updateChannelNameIfNeeded(channelName, index);
+  });
+}
+function updateChannelNameIfNeeded(channelName, index) {
+  if (!channelName) return;
+
+  const displayName = channelName ? ('#' + channelName) : '';
+  let targetTab = document.getElementById(index);
+  let targetDiv = null;
+  targetTab.children[0].childNodes.forEach(function(element) {
+    if(element.className == 'tab-tool-bar') { targetDiv = element; }
+  });
+  targetDiv.children[1].innerHTML = displayName;
 }
 function loadWorkspace(workspaceUrl) {
   const style = "full-view";
@@ -166,11 +196,16 @@ function loadWorkspace(workspaceUrl) {
   webview.addEventListener('dom-ready', function() {
     initializeWebviewForAnotherWorkspace(webview, workspaceUrl);
   });
+  webview.addEventListener('page-title-updated', function() {
+    const channelName = getChannelName(webview);
+    updateChannelNameIfNeeded(channelName, index);
+  });
 }
 function addButtons(div, index) {
-  div.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
-  div.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
-  div.innerHTML += '<button onclick=add();>Add Column</button>';
+  let divForButtons = div.children[0];
+  divForButtons.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
+  divForButtons.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
+  divForButtons.innerHTML += '<button onclick=add();>Add Column</button>';
 }
 function initializeDiv(style, width, index) {
   const generatedDivs = generateTab(width, style);
@@ -209,6 +244,15 @@ function createContainerDiv(index, width) {
 function createToolBarDiv() {
   let divTabToolBar = document.createElement('div');
   divTabToolBar.className = 'tab-tool-bar';
+
+  let buttonDiv = document.createElement('div');
+  buttonDiv.className = 'tab-tool-bar-button';
+  divTabToolBar.appendChild(buttonDiv);
+
+  let channelNameDiv = document.createElement('div');
+  channelNameDiv.className = 'tab-tool-bar-channel';
+  divTabToolBar.appendChild(channelNameDiv);
+
   return divTabToolBar;
 }
 function createWebviewDiv() {
