@@ -279,10 +279,13 @@ function selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarC
   if (shouldRenderOnlySidebar(webview)) { applyCss(webview, onlySidebarCss); }
 }
 function registerToOpenUrl(webview, shell) {
-  webview.addEventListener('new-window', function(e){
-    shell.openExternal(e.url);
-  });
+  // Hack: remove EventListener if already added
+  webview.removeEventListener('new-window', openExternalUrl);
+  webview.addEventListener('new-window', openExternalUrl);
 }
+function openExternalUrl(event){
+  shell.openExternal(event.url);
+};
 function getChannelUrl(baseUrl, channel) {
   const url = "messages/" + channel;
   return new URL(url, baseUrl).href.toString();
