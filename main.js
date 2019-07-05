@@ -90,7 +90,7 @@ function getChannelName(webview) {
   return getChannelNameFromTitle(webview);
 }
 function getWebviews() {
-  return Array.from(document.getElementsByTagName("webview"));
+  return Array.from(document.getElementsByTagName('webview'));
 }
 function getNumberOfWebviews() {
   return getWebviews().length;
@@ -155,7 +155,7 @@ function reload(index) {
   const targetTab = document.getElementById(index);
   let webview = null;
   targetTab.children[0].childNodes.forEach(function(element) {
-    if(element.tagName == "WEBVIEW") { webview = element; }
+    if(element.tagName == 'WEBVIEW') { webview = element; }
   });
   webview.reload();
 }
@@ -164,8 +164,8 @@ function remove(index) {
   targetTab.parentNode.removeChild(targetTab);
 }
 function add() {
-  const style = "body-only";
-  const width = "large-tab";
+  const style = 'body-only';
+  const width = 'large-tab';
   const channel = defaultChannel;
   const index = getUniqueIndex();
   initializeDiv(style, width, index);
@@ -191,8 +191,8 @@ function updateChannelNameIfNeeded(channelName, index) {
   targetDiv.children[1].innerHTML = displayName;
 }
 function loadWorkspace(workspaceUrl) {
-  const style = "full-view";
-  const width = "large-tab";
+  const style = 'full-view';
+  const width = 'large-tab';
   const index = getUniqueIndex();
   initializeDiv(style, width, index);
 
@@ -237,7 +237,7 @@ function generateTab(width, style) {
   };
 }
 function getRootElement() {
-  return document.getElementsByClassName("horizontal-list")[0];
+  return document.getElementsByClassName('horizontal-list')[0];
 }
 function createContainerDiv(index, width) {
   let div = document.createElement('div');
@@ -287,20 +287,20 @@ function openExternalUrl(event){
   shell.openExternal(event.url);
 };
 function getChannelUrl(baseUrl, channel) {
-  const url = "messages/" + channel;
+  const url = 'messages/' + channel;
   return new URL(url, baseUrl).href.toString();
 }
 function shouldRenderOnlyChannelList(webview) {
-  return webview.id == "channel-only";
+  return webview.id == 'channel-only';
 }
 function shouldRenderOnlyBody(webview) {
-  return webview.id == "body-only";
+  return webview.id == 'body-only';
 }
 function shouldRenderOnlySidebar(webview) {
-  return webview.id == "sidebar-only";
+  return webview.id == 'sidebar-only';
 }
 function checkUrlIsDefault(webview) {
-  return webview.attributes.src.value == "about:blank";
+  return webview.attributes.src.value == 'about:blank';
 }
 function loadURL(webview, url) {
   webview.loadURL(url.toString());
