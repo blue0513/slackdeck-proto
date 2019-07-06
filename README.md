@@ -6,6 +6,14 @@ This provides the Slack viewer that looks like TweetDeck.
 
 NOTE: As this is a prototype, we do destructive changes from time to time
 
+## Features
+
++ Multiple columns like TweetDeck
++ Multiple workspaces
++ Add/Remove columns by button
++ Selectable CSS styles for each column
++ Customizable settings as JSON
+
 ## Requirements
 
 + Slack Account
