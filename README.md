@@ -13,6 +13,7 @@ NOTE: As this is a prototype, we do destructive changes from time to time
 + Add/Remove columns by button
 + Selectable CSS styles for each column
 + Customizable settings as JSON
++ Settings are saved and persisted
 
 ## Requirements
 
@@ -25,6 +26,7 @@ NOTE: As this is a prototype, we do destructive changes from time to time
 2. Rename `settings.json.sample` to `settings.json`
 3. Edit `url` value in `settings.json` like `https://your-private.slack.com/`
 4. Run `npm start` in terminal
+5. Import `settings.json`
 
 ## Customize
 
@@ -51,6 +53,8 @@ You can edit these variables bellow.
   + NOTE: even the style is `channel-only`, you can't switch channels by pushing buttons
 + Add other workspaces in columns
   + select the workspace in `Workspaces` on menu bar
++ Reset settings
+  + click `Settings` on menu bar
 
 ## Build as Application
 
