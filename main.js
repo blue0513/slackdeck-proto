@@ -1,13 +1,14 @@
+const { shell } = require('electron');
+var { remote } = require('electron')
+var { isMac, app, Menu, MenuItem } = remote;
+const fs = require('fs');
+
 // global variables
-const json = require('./settings.json');
+const json = loadSettings();
 const menuModule = require('./menu');
 const contents = json.contents;
 const defaultChannel = 'general';
 let uniqueIndex = 0;
-
-const { shell } = require('electron');
-var { remote } = require('electron')
-var { isMac, app, Menu, MenuItem } = remote;
 
 // initialize function
 initialize();
@@ -74,7 +75,7 @@ function generateOtherWorkspaceMenuItems(nameAndUrls) {
 }
 function getOtherWorkspacesInfo(other_urls) {
   const nameAndUrls = other_urls.map(function(url) {
-    const workspaceName = new URL(url).hostname.replace(/.slack.com/g, "");
+    const workspaceName = new URL(url).hostname.replace(/.slack.com/g, '');
     return {'name': workspaceName, 'url': new URL(url)};
   });
   return nameAndUrls;
@@ -307,4 +308,31 @@ function loadURL(webview, url) {
 }
 function applyCss(webview, css) {
   webview.insertCSS(css);
+}
+function loadSettingsDev() {
+  const errorString = 'Error: settings.json does not exist';
+  const jsonPath = './settings.json';
+
+  if (!isExistFile(jsonPath)) { alert(errorString); }
+  return JSON.parse(fs.readFileSync(jsonPath));
+}
+function loadSettings() {
+  if(isDev()) { return loadSettingsDev(); }
+
+  const errorString = 'Error: settings.json does not exist at the same directory of this app';
+  const jsonPath = require('path').join(remote.app.getPath('exe'), '../../../../settings.json');
+
+  if (!isExistFile(jsonPath)) { alert(errorString); }
+  return JSON.parse(fs.readFileSync(jsonPath));
+}
+function isDev() {
+  return process.mainModule.filename.indexOf('app.asar') === -1;
+}
+function isExistFile(file) {
+  try {
+    fs.statSync(file);
+    return true
+  } catch(err) {
+    if(err.code === 'ENOENT') return false
+  }
 }
