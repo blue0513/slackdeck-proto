@@ -6,6 +6,12 @@ This provides the Slack viewer that looks like TweetDeck.
 
 NOTE: As this is a prototype, we do destructive changes from time to time
 
+## Releases
+
+You can download the application [here](https://github.com/blue0513/slackdeck-proto/releases).
+
++ [v0.10.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.10.0): Application distribution for MacOS
+
 ## Features
 
 + Multiple columns like TweetDeck
