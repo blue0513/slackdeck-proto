@@ -57,7 +57,7 @@ You can edit these variables bellow.
 ### Build for Mac
 
 1. Run `node build-mac.js`
-2. In `./dist/mac`, you can fild `slackdeck-proto.app`
+2. In `./dist/mac`, you can find `slackdeck-proto.app`
 3. Copy `settings.json` to the same directory of `slackdeck-proto.app`
 4. Double click `slackdeck-proto.app` and start the app!
 
