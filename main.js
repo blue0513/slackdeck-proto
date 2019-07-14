@@ -1,12 +1,13 @@
 const { shell } = require('electron');
-var { remote } = require('electron')
+var { remote } = require('electron');
 var { isMac, app, Menu, MenuItem } = remote;
 const fs = require('fs');
+const Store = require('electron-store');
+const store = new Store();
 
 // global variables
 const json = loadSettings();
 const menuModule = require('./menu');
-const contents = json.contents;
 const defaultChannel = 'general';
 let uniqueIndex = 0;
 
@@ -14,10 +15,13 @@ let uniqueIndex = 0;
 initialize();
 
 function initialize() {
+  if(noSettings()) { return; }
+
   // create menu bar
   initializeMenu(menuModule.menuTemplate);
 
   // create div elements
+  const contents = json.contents;
   contents.forEach(function(content, index) {
     initializeDiv(content['style'], content['width'], index);
   });
@@ -40,6 +44,10 @@ function initializeMenu(template) {
     const menuItemForWorkspaces = generateMenuItemForWorkspaces();
     menu.append(menuItemForWorkspaces);
   }
+
+  const settingsMenu = generateSettingsMenu();
+  menu.append(settingsMenu);
+
   Menu.setApplicationMenu(menu);
 }
 function incrementUniqueIndex() {
@@ -61,6 +69,26 @@ function generateMenuItemForWorkspaces() {
   otherWorkspacesMenuItems.forEach(function(owsMenuItem) {
     menuItem.submenu.append(owsMenuItem);
   });
+  return menuItem;
+}
+function generateSettingsMenu() {
+  const menuItem = new MenuItem(
+    {
+      id: 'settings',
+      label: 'Settings',
+      submenu: [
+        {
+          label: 'Import Settings',
+          click(){ saveSettings(); }
+        },
+        {
+          label: 'Clear Settings',
+          click(){ clearStoredSettings(); }
+        }
+      ]
+    }
+  );
+
   return menuItem;
 }
 function generateOtherWorkspaceMenuItems(nameAndUrls) {
@@ -309,30 +337,73 @@ function loadURL(webview, url) {
 function applyCss(webview, css) {
   webview.insertCSS(css);
 }
-function loadSettingsDev() {
-  const errorString = 'Error: settings.json does not exist';
-  const jsonPath = './settings.json';
+function saveSettings() {
+  openFileAndSave();
+}
+function openFileAndSave() {
+  const win = remote.getCurrentWindow();
+  remote.dialog.showOpenDialog(
+    win,
+    {
+      properties: ['openFile'],
+      filters: [{
+        name: 'settings',
+        extensions: ['json']
+      }]
+    },
+    (filePath) => {
+      if (filePath) { saveJson(filePath[0]); }
+    }
+  )
+}
+function saveJson(jsonPath) {
+  const settings = JSON.parse(fs.readFileSync(jsonPath));
+  if (!validateJson(settings)) { return null; }
 
-  if (!isExistFile(jsonPath)) { alert(errorString); }
-  return JSON.parse(fs.readFileSync(jsonPath));
+  store.set(settings);
+  forceReload();
+}
+function validateJson(jsonObj) {
+  if (!jsonObj.url) {
+    alert('jsonObj.url is invalid');
+    return false;
+  }
+  if (!jsonObj.other_urls) {
+    alert('jsonObj.other_urls is invalid');
+    return false;
+  }
+  if (!jsonObj.contents) {
+    alert('jsonObj.contents is invalid');
+    return false;
+  }
+
+  return true;
+}
+function forceReload() {
+  remote.getCurrentWindow().reload();
+}
+function clearStoredSettings() {
+  store.clear();
+  forceReload();
 }
 function loadSettings() {
-  if(isDev()) { return loadSettingsDev(); }
-
-  const errorString = 'Error: settings.json does not exist at the same directory of this app';
-  const jsonPath = require('path').join(remote.app.getPath('exe'), '../../../../settings.json');
-
-  if (!isExistFile(jsonPath)) { alert(errorString); }
-  return JSON.parse(fs.readFileSync(jsonPath));
-}
-function isDev() {
-  return process.mainModule.filename.indexOf('app.asar') === -1;
-}
-function isExistFile(file) {
-  try {
-    fs.statSync(file);
-    return true
-  } catch(err) {
-    if(err.code === 'ENOENT') return false
+  if (noSettings()) {
+    saveSettings();
+    return;
   }
+
+  return buildJsonObjectFromStoredData();
+}
+function buildJsonObjectFromStoredData() {
+  let jsonObj = {
+    url: store.get('url'),
+    other_urls: store.get('other_urls'),
+    contents: store.get('contents')
+  }
+  if (!validateJson(jsonObj)) { return null; }
+
+  return jsonObj;
+}
+function noSettings() {
+  return store.size == 0;
 }
