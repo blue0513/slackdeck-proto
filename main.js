@@ -313,7 +313,12 @@ function registerToOpenUrl(webview, shell) {
   webview.addEventListener('new-window', openExternalUrl);
 }
 function openExternalUrl(event){
-  shell.openExternal(event.url);
+  const url = event.url;
+  // https://electronjs.org/docs/tutorial/security#14-do-not-use-openexternal-with-untrusted-content
+  // Page 20 of https://www.blackhat.com/docs/us-17/thursday/us-17-Carettoni-Electronegativity-A-Study-Of-Electron-Security-wp.pdf
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    shell.openExternal(url);
+  }
 };
 function getChannelUrl(baseUrl, channel) {
   const url = 'messages/' + channel;
