@@ -10,7 +10,8 @@ NOTE: As this is a prototype, we do destructive changes from time to time
 
 You can download the application [here](https://github.com/blue0513/slackdeck-proto/releases).
 
-+ [v0.10.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.10.0): Application distribution for MacOS
++ [v0.10.1](https://github.com/blue0513/slackdeck-proto/releases/tag/0.10.1): Update for security reason
++ [v0.10.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.10.0): Application distribution for macOS
 
 ## Features
 
@@ -68,8 +69,8 @@ You can edit these variables bellow.
 
 1. Run `node build-mac.js`
 2. In `./dist/mac`, you can find `slackdeck-proto.app`
-3. Copy `settings.json` to the same directory of `slackdeck-proto.app`
-4. Double click `slackdeck-proto.app` and start the app!
+3. Double click `slackdeck-proto.app` and start the app
+4. Import `settings.json`
 
 ## Contribute
 
