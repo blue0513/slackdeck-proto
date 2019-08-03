@@ -32,10 +32,6 @@ function initialize() {
     webview.addEventListener('dom-ready', function() {
       initializeWebview(webview, contents[index]['channel']);
     });
-    webview.addEventListener('page-title-updated', function() {
-      const channelName = getChannelName(webview);
-      updateChannelNameIfNeeded(channelName, index);
-    });
   });
 }
 function initializeMenu(template) {
@@ -108,16 +104,6 @@ function getOtherWorkspacesInfo(other_urls) {
   });
   return nameAndUrls;
 }
-function getChannelNameFromTitle(webview) {
-  const pageTitle = webview.getTitle();
-  const titleElements = pageTitle.split(' ');
-
-  if (titleElements.length == 4) return titleElements[0];
-  return null;
-}
-function getChannelName(webview) {
-  return getChannelNameFromTitle(webview);
-}
 function getWebviews() {
   return Array.from(document.getElementsByTagName('webview'));
 }
@@ -152,20 +138,27 @@ function initializeWebviewForAnotherWorkspace(webview, workspaceUrl) {
   }
 }
 function getOnlySidebarCss() {
-  const disableChannelList = '.client_channels_list_container { display: none !important; }';
-  const disableBody = '#col_messages { display: none !important; }';
-  const disableHeader = '.messages_header { display: none !important; }';
-  return disableChannelList + disableBody + disableHeader;
+  const disableChannelList = '.p-workspace__sidebar { display: none !important; }';
+  const widenSidebar = '.p-workspace--context-pane-expanded { grid-template-columns: 0px auto 100% !important; }';
+  const disableTeamHeader = '.p-classic_nav__team_header { display: none !important; }';
+  const disableChannelHeader = '.p-classic_nav__channel_header { display: none !important; }';
+  const disableBody = '.p-workspace__primary_view { display: none !important; }';
+  return disableChannelList + widenSidebar+ disableTeamHeader + disableChannelHeader + disableBody;
 }
 function getOnlyChannelCss() {
-  const disableBody = '.client_main_container { display: none !important; }';
-  return disableBody;
+  const disableBody = '.p-workspace__primary_view { display: none !important; }';
+  const disableChannelHeader = '.p-classic_nav__channel_header { display: none !important; }';
+  const disableRightHeader = '.p-classic_nav__right_header { display: none !important; }';
+  const disableSidebar = '.p-workspace__secondary_view { display: none !important; }';
+  return disableBody + disableChannelHeader + disableRightHeader + disableSidebar;
 }
 function getOnlyBodyCss() {
-  const disableChannelList = '.client_channels_list_container { display: none !important; }';
-  const disableHeader = '#client_header { display: none !important; }';
-  const widenBody = '#col_messages { width 100% !important; }';
-  return disableChannelList + disableHeader + widenBody;
+  const disableChannelList = '.p-workspace__sidebar { display: none !important; }';
+  const disableTeamHeader = '.p-classic_nav__team_header { display: none !important; }';
+  const widenBody = '.p-workspace--context-pane-collapsed { grid-template-columns: 0px auto !important; }';
+  const adjustHeight = '.p-workspace--classic-nav { grid-template-rows: min-content 60px auto !important; }'
+  const adjustLeftPadding = '.p-workspace--context-pane-expanded { grid-template-columns: 0px auto !important; }';
+  return disableChannelList + widenBody + adjustHeight + disableTeamHeader + adjustLeftPadding;
 }
 function addKeyEvents(webview) {
   webview.getWebContents().on('before-input-event', (event, input) => {
@@ -177,7 +170,6 @@ function addKeyEvents(webview) {
 function opendev() {
   const webviews = getWebviews();
   let webview = webviews[1];
-  webview.goBack();
   webview.openDevTools();
 }
 function reload(index) {
@@ -203,10 +195,6 @@ function add() {
   webview.addEventListener('dom-ready', function() {
     initializeWebview(webview, channel);
   });
-  webview.addEventListener('page-title-updated', function() {
-    const channelName = getChannelName(webview);
-    updateChannelNameIfNeeded(channelName, index);
-  });
 }
 function updateChannelNameIfNeeded(channelName, index) {
   if (!channelName) return;
@@ -228,10 +216,6 @@ function loadWorkspace(workspaceUrl) {
   const webview = getWebviews()[getNumberOfWebviews() - 1];
   webview.addEventListener('dom-ready', function() {
     initializeWebviewForAnotherWorkspace(webview, workspaceUrl);
-  });
-  webview.addEventListener('page-title-updated', function() {
-    const channelName = getChannelName(webview);
-    updateChannelNameIfNeeded(channelName, index);
   });
 }
 function addButtons(div, index) {
