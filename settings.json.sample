@@ -6,22 +6,22 @@
     ],
     "contents": [
         {
-            "channel": "general",
+            "channel_id": "YOUR_CHANNEL_ID",
             "style": "channel-only",
             "width": "small-tab"
         },
         {
-            "channel": "general",
+            "channel_id": "YOUR_CHANNEL_ID",
             "style": "body-only",
             "width": "large-tab"
         },
         {
-            "channel": "random",
+            "channel_id": "YOUR_CHANNEL_ID",
             "style": "body-only",
             "width": "large-tab"
         },
         {
-            "channel": "general",
+            "channel_id": "YOUR_CHANNEL_ID",
             "style": "sidebar-only",
             "width": "small-tab"
         }
