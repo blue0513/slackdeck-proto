@@ -8,7 +8,7 @@ const store = new Store();
 // global variables
 const json = loadSettings();
 const menuModule = require('./menu');
-const defaultChannel = 'general';
+const defaultChannel = 'unreads';
 let uniqueIndex = 0;
 
 // initialize function
@@ -30,7 +30,7 @@ function initialize() {
   const webviews = getWebviews();
   webviews.forEach(function(webview, index) {
     webview.addEventListener('dom-ready', function() {
-      initializeWebview(webview, contents[index]['channel']);
+      initializeWebview(webview, contents[index]['channel_id']);
     });
   });
 }
@@ -110,13 +110,13 @@ function getWebviews() {
 function getNumberOfWebviews() {
   return getWebviews().length;
 }
-function initializeWebview(webview, channel) {
+function initializeWebview(webview, channelId) {
   addKeyEvents(webview);
   registerToOpenUrl(webview, shell);
   setWebviewAutosize(webview, 'on');
 
   if (checkUrlIsDefault(webview)) {
-    const channelUrl = getChannelUrl(json.url, channel);
+    const channelUrl = getChannelUrl(json.url, channelId);
     loadURL(webview, channelUrl);
   }
 
@@ -132,8 +132,8 @@ function initializeWebviewForAnotherWorkspace(webview, workspaceUrl) {
   setWebviewAutosize(webview, 'on');
 
   if (checkUrlIsDefault(webview)) {
-    const channel = defaultChannel;
-    const url = getChannelUrl(workspaceUrl, channel);
+    const channelId = defaultChannel;
+    const url = getChannelUrl(workspaceUrl, channelId);
     loadURL(webview, url);
   }
 }
@@ -187,13 +187,13 @@ function remove(index) {
 function add() {
   const style = 'body-only';
   const width = 'large-tab';
-  const channel = defaultChannel;
+  const channelId = defaultChannel;
   const index = getUniqueIndex();
   initializeDiv(style, width, index);
 
   const webview = getWebviews()[getNumberOfWebviews() - 1];
   webview.addEventListener('dom-ready', function() {
-    initializeWebview(webview, channel);
+    initializeWebview(webview, channelId);
   });
 }
 function updateChannelNameIfNeeded(channelName, index) {
@@ -304,8 +304,8 @@ function openExternalUrl(event){
     shell.openExternal(url);
   }
 };
-function getChannelUrl(baseUrl, channel) {
-  const url = 'messages/' + channel;
+function getChannelUrl(baseUrl, channelId) {
+  const url = 'messages/' + channelId;
   return new URL(url, baseUrl).href.toString();
 }
 function shouldRenderOnlyChannelList(webview) {

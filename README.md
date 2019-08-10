@@ -43,7 +43,9 @@ You can edit these variables bellow.
 
 + **url**: Slack's Web URL like `https://your-private.slack.com/`
 + **other_urls**: Other workspaces' URL
-+ **channel**: Channel' name like `general`
++ **channel_id**: Channel's ID. You can get it by ...
+  + Open Slack for web. Then go to the channel. The URL's last word is ID
+  + Open Slack for desktop. Then right click & `copy link` on the channel-list.
 + **style**: CSS style for each column
   + `channel-only`: only channel's list showing up
   + `body-only`: only messages showing up
