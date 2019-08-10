@@ -10,7 +10,8 @@ NOTE: As this is a prototype, we do destructive changes from time to time
 
 You can download the application [here](https://github.com/blue0513/slackdeck-proto/releases).
 
-+ [v0.11.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.11.0): Fix Style: adjusted for new slack’s css style
++ [v0.12.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.12.0): Fix Channel Settings: adjusted for new slack's URL
++ [v0.11.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.11.0): Fix Style: adjusted for new slack's css style
 + [v0.10.1](https://github.com/blue0513/slackdeck-proto/releases/tag/0.10.1): Update for security reason
 + [v0.10.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.10.0): Application distribution for macOS
 
