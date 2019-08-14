@@ -76,6 +76,13 @@ You can edit these variables bellow.
 3. Double click `slackdeck-proto.app` and start the app
 4. Import `settings.json`
 
+### Build for Windows
+
+1. Run `node build-win.js`
+2. In `./dist/`, you can find `slackdeck-proto Setup.exe`
+3. Double click `slackdeck-proto Setup.exe` and start the app
+4. Import `settings.json`
+
 ## Contribute
 
 You can use [issues](https://github.com/blue0513/slackdeck-proto/issues) as you like.
