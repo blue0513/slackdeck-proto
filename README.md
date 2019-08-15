@@ -72,14 +72,14 @@ You can edit these variables bellow.
 
 ### Build for Mac
 
-1. Run `node build-mac.js`
+1. Run `node build/build-mac.js`
 2. In `./dist/mac`, you can find `slackdeck-proto.app`
 3. Double click `slackdeck-proto.app` and start the app
 4. Import `settings.json`
 
 ### Build for Windows
 
-1. Run `node build-win.js`
+1. Run `node build/build-win.js`
 2. In `./dist/`, you can find `slackdeck-proto Setup.exe`
 3. Double click `slackdeck-proto Setup.exe` and start the app
 4. Import `settings.json`
