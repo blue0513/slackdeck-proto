@@ -111,7 +111,6 @@ function getNumberOfWebviews() {
   return getWebviews().length;
 }
 function initializeWebview(webview, channelId) {
-  addKeyEvents(webview);
   registerToOpenUrl(webview, shell);
   setWebviewAutosize(webview, 'on');
 
@@ -127,7 +126,6 @@ function initializeWebview(webview, channelId) {
 }
 // TODO: integrate with `initializeWebview`
 function initializeWebviewForAnotherWorkspace(webview, workspaceUrl) {
-  addKeyEvents(webview);
   registerToOpenUrl(webview, shell);
   setWebviewAutosize(webview, 'on');
 
@@ -159,13 +157,6 @@ function getOnlyBodyCss() {
   const adjustHeight = '.p-workspace--classic-nav { grid-template-rows: min-content 60px auto !important; }'
   const adjustLeftPadding = '.p-workspace--context-pane-expanded { grid-template-columns: 0px auto !important; }';
   return disableChannelList + widenBody + adjustHeight + disableTeamHeader + adjustLeftPadding;
-}
-function addKeyEvents(webview) {
-  webview.getWebContents().on('before-input-event', (event, input) => {
-    if(input.meta && input.key === '[' && webview.canGoBack()) { webview.goBack(); }
-    // NOTE: canGoForward() and goForward() do not work somewhy....
-    if(input.meta && input.key === ']' && webview.canGoForward()) { webview.goForward(); }
-  });
 }
 function opendev() {
   const webviews = getWebviews();
