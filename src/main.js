@@ -175,6 +175,46 @@ function remove(index) {
   let targetTab = document.getElementById(index);
   targetTab.parentNode.removeChild(targetTab);
 }
+function isUrl(str) {
+  try {
+    new URL(str);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+function jumpLink(index) {
+  const targetTab = document.getElementById(index);
+  let webview = null;
+  targetTab.children[0].childNodes.forEach(function(element) {
+    if(element.tagName == 'WEBVIEW') { webview = element; }
+  });
+
+  const element = document.getElementById(index.toString() + '-message-url');
+  if(!isUrl(element.value)) return;
+
+  const maybeUrl = new URL(element.value);
+  if (validateUrl(maybeUrl)) {
+    const slackUrl = modifySlackUrl(maybeUrl);
+    loadURL(webview, slackUrl);
+    element.value = '';
+  }
+}
+function modifySlackUrl(url) {
+  const isThread = url.href.includes('thread_ts');
+  if (!isThread) {
+    return url.href.replace('archives', 'messages');
+  }
+
+  const parentMessageId = 'p' + url.search.replace(/(\?thread_ts\=)|(\&cid.*)|(\.)/g, '');
+  const channelId = url.pathname.split('/')[2];
+  return url.origin + '/messages/' + channelId + '/' + parentMessageId;
+}
+function validateUrl(url) {
+  const cond1 = url.protocol == 'http:' || url.protocol == 'https:';
+  const cond2 = url.hostname.endsWith('.slack.com');
+  return cond1 && cond2;
+}
 function add() {
   const style = 'body-only';
   const width = 'large-tab';
@@ -214,6 +254,11 @@ function addButtons(div, index) {
   divForButtons.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
   divForButtons.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
   divForButtons.innerHTML += '<button onclick=add();>Add Column</button>';
+  divForButtons.innerHTML +=
+    `<input type="text"
+      id="${index}-message-url"
+      placeholder="Message URL"
+      onKeyDown="if(event.keyCode == 13) jumpLink(${index})">`;
 }
 function initializeDiv(style, width, index) {
   const generatedDivs = generateTab(width, style);

@@ -65,6 +65,8 @@ You can edit these variables bellow.
   + NOTE: even the style is `channel-only`, you can't switch channels by pushing buttons
 + Add other workspaces in columns
   + select the workspace in `Workspaces` on menu bar
++ Jump to the message via link
+  + Input URL in `Message URL` on menubar
 + Reset settings
   + click `Settings` on menu bar
 
