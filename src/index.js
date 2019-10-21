@@ -1,33 +1,33 @@
-'use strict';
-
 const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const path = require('path');
+
+const { app } = electron;
+const { BrowserWindow } = electron;
 let mainWindow;
 
-app.on('window-all-closed', function() {
-  if (process.platform != 'darwin') {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on('ready', function() {
+app.on('ready', () => {
   mainWindow = new BrowserWindow({
     webPreferences: {
       width: 1000,
       height: 600,
       transparent: false,
-      frame:       true,
-      resizable:   true,
-      hasShadow:   false,
+      frame: true,
+      resizable: true,
+      hasShadow: false,
       alwaysOnTop: false,
       nodeIntegration: true,
-      webviewTag: true
-    }
+      webviewTag: true,
+    },
   });
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  mainWindow.loadURL(path.join('file://', __dirname, '/index.html'));
 
-  mainWindow.on('closed', function() {
+  mainWindow.on('closed', () => {
     mainWindow = null;
   });
 });
