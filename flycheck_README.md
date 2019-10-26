@@ -4,7 +4,6 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/blue0513/slackdeck-proto)
 ![GitHub All Releases](https://img.shields.io/github/downloads/blue0513/slackdeck-proto/total?color=blue)
 ![](https://github.com/blue0513/slackdeck-proto/workflows/eslint/badge.svg)
-
 This provides the Slack viewer that looks like TweetDeck.
 
 [![Image from Gyazo](https://i.gyazo.com/0613980a28e63cfcb3a3a194c6d48875.gif)](https://gyazo.com/0613980a28e63cfcb3a3a194c6d48875)
