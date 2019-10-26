@@ -1,5 +1,6 @@
-var { remote } = require('electron')
-var { isMac, app } = remote;
+const { remote, shell } = require('electron');
+
+const { isMac } = remote;
 
 const menuTemplate = [
   // { role: 'appMenu' }
@@ -14,15 +15,15 @@ const menuTemplate = [
       { role: 'hideothers' },
       { role: 'unhide' },
       { type: 'separator' },
-      { role: 'quit' }
-    ]
+      { role: 'quit' },
+    ],
   }] : []),
   // { role: 'fileMenu' }
   {
     label: 'File',
     submenu: [
-      isMac ? { role: 'close' } : { role: 'quit' }
-    ]
+      isMac ? { role: 'close' } : { role: 'quit' },
+    ],
   },
   // { role: 'editMenu' }
   {
@@ -43,15 +44,15 @@ const menuTemplate = [
           label: 'Speech',
           submenu: [
             { role: 'startspeaking' },
-            { role: 'stopspeaking' }
-          ]
-        }
+            { role: 'stopspeaking' },
+          ],
+        },
       ] : [
         { role: 'delete' },
         { type: 'separator' },
-        { role: 'selectAll' }
-      ])
-    ]
+        { role: 'selectAll' },
+      ]),
+    ],
   },
   // { role: 'viewMenu' }
   {
@@ -65,8 +66,8 @@ const menuTemplate = [
       { role: 'zoomin' },
       { role: 'zoomout' },
       { type: 'separator' },
-      { role: 'togglefullscreen' }
-    ]
+      { role: 'togglefullscreen' },
+    ],
   },
   // { role: 'windowMenu' }
   {
@@ -78,23 +79,21 @@ const menuTemplate = [
         { type: 'separator' },
         { role: 'front' },
         { type: 'separator' },
-        { role: 'window' }
+        { role: 'window' },
       ] : [
-        { role: 'close' }
-      ])
-    ]
+        { role: 'close' },
+      ]),
+    ],
   },
   {
     role: 'help',
     submenu: [
       {
         label: 'Learn More',
-        click () { require('electron').shell.openExternalSync('https://electronjs.org') }
-      }
-    ]
-  }
-]
+        click() { shell.openExternalSync('https://electronjs.org'); },
+      },
+    ],
+  },
+];
 
-module.exports = {
-  menuTemplate: menuTemplate
-};
+module.exports = { menuTemplate };
