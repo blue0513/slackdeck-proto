@@ -1,23 +1,32 @@
-const { shell, remote } = require('electron');
+// ////////////////
+// Libraries
+// ////////////////
 
-const {
-  Menu, MenuItem,
-} = remote;
+const { shell, remote } = require('electron');
 const fs = require('fs');
 const Store = require('electron-store');
-
-const store = new Store();
-
-// global variables
-const json = loadSettings();
 const menuModule = require('./menu');
 const Library = require('./lib/lib');
 
+// ////////////////
+// Global Variables
+// ////////////////
+
+const { Menu, MenuItem } = remote;
+const store = new Store();
+const json = loadSettings();
 const defaultChannel = 'unreads';
 let uniqueIndex = 0;
 
-// initialize function
+// ////////////////
+// Initialize
+// ////////////////
+
 initialize();
+
+// ////////////////
+// Functions
+// ////////////////
 
 function initialize() {
   if (noSettings()) { return; }
@@ -182,44 +191,12 @@ function loadWorkspace(workspaceUrl) {
     initializeWebviewForAnotherWorkspace(webview, workspaceUrl);
   });
 }
-function addButtons(div, index) {
-  const divForButtons = div.children[0];
-  divForButtons.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
-  divForButtons.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
-  divForButtons.innerHTML += '<button onclick=add();>Add Column</button>';
-  divForButtons.innerHTML
-    += `<input type="text"
-      id="${index}-message-url"
-      placeholder="Message URL"
-      onKeyDown="if(event.keyCode == 13) jumpLink(${index})">`;
-}
 function initializeDiv(style, width) {
-  const generatedDivs = generateTab(width, style);
-  addButtons(generatedDivs.divTabToolBar, getUniqueIndex());
+  const generatedDivs = Library.generateTab(width, style, getUniqueIndex());
+  Library.addButtons(generatedDivs.divTabToolBar, getUniqueIndex());
 
   // update unique index
   incrementUniqueIndex();
-}
-function generateTab(width, style) {
-  const divContainer = Library.createContainerDiv(getUniqueIndex(), width);
-  const divTabToolBar = Library.createToolBarDiv();
-  const divWebview = Library.createWebviewDiv();
-  const webview = Library.createWebview(style);
-  const root = getRootElement();
-
-  root.appendChild(divContainer);
-  divContainer.appendChild(divWebview);
-  divWebview.appendChild(divTabToolBar);
-  divWebview.appendChild(webview);
-
-  return {
-    divContainer,
-    divTabToolBar,
-    divWebview,
-  };
-}
-function getRootElement() {
-  return document.getElementsByClassName('horizontal-list')[0];
 }
 function selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss }) {
   if (Library.shouldRenderOnlyBody(webview)) { applyCss(webview, onlyBodyCss); }

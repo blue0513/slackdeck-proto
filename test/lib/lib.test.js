@@ -193,3 +193,43 @@ describe('validateJson', () => {
   });
   /* eslint-enable no-undef */
 });
+
+describe('getRootElement', () => {
+  test('get element', () => {
+    document.body.innerHTML = '<div><ul class="horizontal-list"></div>';
+    expect(Library.getRootElement()).toBeTruthy();
+  });
+
+  test('get no element', () => {
+    document.body.innerHTML = '<div><ul></div>';
+    expect(Library.getRootElement()).toBeFalsy();
+  });
+});
+
+describe('generateTab', () => {
+  test('get element', () => {
+    document.body.innerHTML = '<div><ul class="horizontal-list"></div>';
+    expect(Library.generateTab('small', 'body-only', 0).divContainer).toBeTruthy();
+    expect(Library.generateTab('small', 'body-only', 0).divTabToolBar).toBeTruthy();
+    expect(Library.generateTab('small', 'body-only', 0).divWebview).toBeTruthy();
+  });
+});
+
+describe('addButtons', () => {
+  test('passes', () => {
+    document.body.innerHTML = '<div id="dummy"><div></div></div>';
+    const div = document.getElementById('dummy');
+    expect(Library.addButtons(div, 0).childNodes.length).toBe(4);
+
+    expect(Library.addButtons(div, 0).childNodes[0].type).toBe('submit');
+    expect(Library.addButtons(div, 0).childNodes[0].innerHTML).toBe('Reload');
+
+    expect(Library.addButtons(div, 0).childNodes[1].type).toBe('submit');
+    expect(Library.addButtons(div, 0).childNodes[1].innerHTML).toBe('Remove Column');
+
+    expect(Library.addButtons(div, 0).childNodes[2].type).toBe('submit');
+    expect(Library.addButtons(div, 0).childNodes[2].innerHTML).toBe('Add Column');
+
+    expect(Library.addButtons(div, 0).childNodes[3].type).toBe('text');
+  });
+});

@@ -147,4 +147,41 @@ module.exports = class Library {
 
     return true;
   }
+
+  static getRootElement() {
+    return document.getElementsByClassName('horizontal-list')[0];
+  }
+
+  static generateTab(width, style, index) {
+    const divContainer = Library.createContainerDiv(index, width);
+    const divTabToolBar = Library.createToolBarDiv();
+    const divWebview = Library.createWebviewDiv();
+    const webview = Library.createWebview(style);
+    const root = Library.getRootElement();
+
+    root.appendChild(divContainer);
+    divContainer.appendChild(divWebview);
+    divWebview.appendChild(divTabToolBar);
+    divWebview.appendChild(webview);
+
+    return {
+      divContainer,
+      divTabToolBar,
+      divWebview,
+    };
+  }
+
+  static addButtons(div, index) {
+    const divForButtons = div.children[0];
+    divForButtons.innerHTML = `<button onclick=reload(${index});>Reload</button>`;
+    divForButtons.innerHTML += `<button onclick=remove(${index});>Remove Column</button>`;
+    divForButtons.innerHTML += '<button onclick=add();>Add Column</button>';
+    divForButtons.innerHTML
+      += `<input type="text"
+        id="${index}-message-url"
+        placeholder="Message URL"
+        onKeyDown="if(event.keyCode == 13) jumpLink(${index})">`;
+
+    return divForButtons;
+  }
 };
