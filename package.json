@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "electron ./src",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest test/**/*.test.js",
     "lint": "eslint src/*.js"
   },
   "keywords": [],
@@ -15,7 +15,9 @@
     "electron-builder": "^21.0.15",
     "eslint": "^6.5.1",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.21.0",
+    "jest": "^24.9.0"
   },
   "dependencies": {
     "electron": "^5.0.4",
