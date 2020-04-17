@@ -58,7 +58,6 @@ You can edit these variables bellow.
 + **style**: CSS style for each column
   + `channel-only`: only channel's list showing up
   + `body-only`: only messages showing up
-  + `sidebar-only`: only sidebar (contains Threads, Activity etc)  showing up
 + **width**: Width of each column
   + `small-tab`: recommend to use with `channel-only` or `sidebar-only`
   + `large-tab`: recommend to use with `body-only`
