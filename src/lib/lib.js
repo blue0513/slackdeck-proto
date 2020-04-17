@@ -131,10 +131,6 @@ module.exports = class Library {
     return webview.id === 'body-only';
   }
 
-  static shouldRenderOnlySidebar(webview) {
-    return webview.id === 'sidebar-only';
-  }
-
   static checkUrlIsDefault(webview) {
     return webview.attributes.src.value === 'about:blank';
   }

@@ -131,12 +131,6 @@ describe('shouldRenderOnly*', () => {
     expect(Library.shouldRenderOnlyChannelList(webview)).toBe(true);
   });
 
-  test('side bar', () => {
-    const webview = document.createElement('webview');
-    webview.id = 'sidebar-only';
-    expect(Library.shouldRenderOnlySidebar(webview)).toBe(true);
-  });
-
   test('body', () => {
     const webview = document.createElement('webview');
     webview.id = 'body-only';
@@ -148,7 +142,6 @@ describe('shouldRenderOnly*', () => {
     webview.id = 'foo-only';
 
     expect(Library.shouldRenderOnlyChannelList(webview)).toBe(false);
-    expect(Library.shouldRenderOnlySidebar(webview)).toBe(false);
     expect(Library.shouldRenderOnlyBody(webview)).toBe(false);
   });
 });

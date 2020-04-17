@@ -33,9 +33,6 @@ body{
 #channel-only{
     height: 100%;
 }
-#sidebar-only{
-    height: 100%;
-}
 .large-tab{
     display: inline-block;
     height: 100%;
