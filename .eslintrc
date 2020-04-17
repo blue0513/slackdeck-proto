@@ -16,6 +16,11 @@
         "ecmaVersion": 2018
     },
     "rules": {
+        "import/no-extraneous-dependencies": [
+            "error", {
+                "devDependencies": true
+            }
+        ],
         "no-use-before-define": [
             "error", {
                 "functions": false,
