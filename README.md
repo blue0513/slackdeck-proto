@@ -16,6 +16,7 @@ NOTE: As this is a prototype, we do destructive changes from time to time
 
 You can download the application [here](https://github.com/blue0513/slackdeck-proto/releases).
 
++ [v0.15.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.15.0): Update Style for new Slack UI
 + [v0.14.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.14.0): Jump the message via link & Fix bugs
 + [v0.13.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.13.0): Application distribution for macOS & Windows
 + [v0.12.0](https://github.com/blue0513/slackdeck-proto/releases/tag/0.12.0): Fix Channel Settings: adjusted for new slack's URL
