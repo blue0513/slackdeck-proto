@@ -120,8 +120,7 @@ function initializeWebview(webview, channelId) {
 
   const onlyBodyCss = Library.getOnlyBodyCss();
   const onlyChannelCss = Library.getOnlyChannelCss();
-  const onlySidebarCss = Library.getOnlySidebarCss();
-  selectAplicableCss(resizableWebview, { onlyBodyCss, onlyChannelCss, onlySidebarCss });
+  selectAplicableCss(resizableWebview, { onlyBodyCss, onlyChannelCss });
 }
 // TODO: integrate with `initializeWebview`
 function initializeWebviewForAnotherWorkspace(webview, workspaceUrl) {
@@ -198,10 +197,9 @@ function initializeDiv(style, width) {
   // update unique index
   incrementUniqueIndex();
 }
-function selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss, onlySidebarCss }) {
+function selectAplicableCss(webview, { onlyBodyCss, onlyChannelCss }) {
   if (Library.shouldRenderOnlyBody(webview)) { applyCss(webview, onlyBodyCss); }
   if (Library.shouldRenderOnlyChannelList(webview)) { applyCss(webview, onlyChannelCss); }
-  if (Library.shouldRenderOnlySidebar(webview)) { applyCss(webview, onlySidebarCss); }
 }
 function registerToOpenUrl(webview) {
   // Hack: remove EventListener if already added

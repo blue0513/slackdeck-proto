@@ -22,7 +22,7 @@
         },
         {
             "channel_id": "YOUR_CHANNEL_ID",
-            "style": "sidebar-only",
+            "style": "body-only",
             "width": "small-tab"
         }
     ]

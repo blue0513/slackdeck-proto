@@ -27,20 +27,28 @@ module.exports = class Library {
   }
 
   static getOnlyChannelCss() {
+    const adjustHeight = '.p-client--ia-top-nav { grid-template-rows: 0px auto min-content !important; }';
+    const disableHeader = '.p-top_nav { display: none !important; }';
     const disableBody = '.p-workspace__primary_view { display: none !important; }';
     const disableChannelHeader = '.p-classic_nav__channel_header { display: none !important; }';
     const disableRightHeader = '.p-classic_nav__right_header { display: none !important; }';
     const disableSidebar = '.p-workspace__secondary_view { display: none !important; }';
-    return disableBody + disableChannelHeader + disableRightHeader + disableSidebar;
+    return (
+      disableHeader
+      + adjustHeight
+      + disableBody
+      + disableChannelHeader
+      + disableRightHeader
+      + disableSidebar
+    );
   }
 
   static getOnlyBodyCss() {
     const disableChannelList = '.p-workspace__sidebar { display: none !important; }';
     const disableTeamHeader = '.p-classic_nav__team_header { display: none !important; }';
     const widenBody = '.p-workspace--context-pane-collapsed { grid-template-columns: 0px auto !important; }';
-    const adjustHeight = '.p-workspace--classic-nav { grid-template-rows: min-content 60px auto !important; }';
     const adjustLeftPadding = '.p-workspace--context-pane-expanded { grid-template-columns: 0px auto !important; }';
-    return disableChannelList + widenBody + adjustHeight + disableTeamHeader + adjustLeftPadding;
+    return disableChannelList + widenBody + disableTeamHeader + adjustLeftPadding;
   }
 
   static isUrl(str) {
@@ -121,10 +129,6 @@ module.exports = class Library {
 
   static shouldRenderOnlyBody(webview) {
     return webview.id === 'body-only';
-  }
-
-  static shouldRenderOnlySidebar(webview) {
-    return webview.id === 'sidebar-only';
   }
 
   static checkUrlIsDefault(webview) {
