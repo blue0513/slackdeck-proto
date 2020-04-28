@@ -25,5 +25,6 @@
             "style": "body-only",
             "width": "small-tab"
         }
-    ]
+    ],
+    "sticky": true
 }

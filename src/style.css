@@ -67,3 +67,8 @@ body{
     display:block;
     white-space: nowrap;
 }
+
+.sticky {
+    position: sticky;
+    left: 0;
+}

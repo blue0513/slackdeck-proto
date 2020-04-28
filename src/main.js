@@ -191,7 +191,10 @@ function loadWorkspace(workspaceUrl) {
   });
 }
 function initializeDiv(style, width) {
-  const generatedDivs = Library.generateTab(width, style, getUniqueIndex());
+  const shouldSticky = json.sticky;
+  console.log(json)
+  console.log(shouldSticky);
+  const generatedDivs = Library.generateTab(width, style, getUniqueIndex(), shouldSticky);
   Library.addButtons(generatedDivs.divTabToolBar, getUniqueIndex());
 
   // update unique index
@@ -266,6 +269,7 @@ function buildJsonObjectFromStoredData() {
     url: store.get('url'),
     other_urls: store.get('other_urls'),
     contents: store.get('contents'),
+    sticky: store.get('sticky'),
   };
   if (!Library.validateJson(jsonObj)) { return null; }
 
