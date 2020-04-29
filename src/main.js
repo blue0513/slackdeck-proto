@@ -192,8 +192,6 @@ function loadWorkspace(workspaceUrl) {
 }
 function initializeDiv(style, width) {
   const shouldSticky = json.sticky;
-  console.log(json)
-  console.log(shouldSticky);
   const generatedDivs = Library.generateTab(width, style, getUniqueIndex(), shouldSticky);
   Library.addButtons(generatedDivs.divTabToolBar, getUniqueIndex());
 
