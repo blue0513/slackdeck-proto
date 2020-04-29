@@ -77,10 +77,15 @@ module.exports = class Library {
     return cond1 && cond2;
   }
 
-  static createContainerDiv(index, width) {
+  static createContainerDiv(index, width, shouldSticky) {
     const div = document.createElement('div');
     div.id = index;
-    div.className = width;
+    if (shouldSticky && index === 0) {
+      div.className = `${width} sticky`;
+    } else {
+      div.className = width;
+    }
+
     return div;
   }
 
@@ -156,8 +161,8 @@ module.exports = class Library {
     return document.getElementsByClassName('horizontal-list')[0];
   }
 
-  static generateTab(width, style, index) {
-    const divContainer = Library.createContainerDiv(index, width);
+  static generateTab(width, style, index, sticky) {
+    const divContainer = Library.createContainerDiv(index, width, sticky);
     const divTabToolBar = Library.createToolBarDiv();
     const divWebview = Library.createWebviewDiv();
     const webview = Library.createWebview(style);

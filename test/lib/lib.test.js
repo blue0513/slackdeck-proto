@@ -68,7 +68,19 @@ describe('validateUrl', () => {
 
 describe('createContainerDiv', () => {
   test('create div', () => {
-    const div = Library.createContainerDiv(1, 'large');
+    const div = Library.createContainerDiv(1, 'large', false);
+    expect(div.id).toBe('1');
+    expect(div.className).toBe('large');
+  });
+
+  test('create sticky div', () => {
+    const div = Library.createContainerDiv(0, 'large', true);
+    expect(div.id).toBe('0');
+    expect(div.className).toBe('large sticky');
+  });
+
+  test('create no sticky div if index is not zero', () => {
+    const div = Library.createContainerDiv(1, 'large', true);
     expect(div.id).toBe('1');
     expect(div.className).toBe('large');
   });
@@ -162,7 +174,9 @@ describe('shouldRenderOnly*', () => {
 
 describe('validateJson', () => {
   test('valid', () => {
-    const json = { url: 'url', other_urls: 'other_urls', contents: 'contents' };
+    const json = {
+      url: 'url', other_urls: 'other_urls', contents: 'contents', sticky: true,
+    };
     expect(Library.validateJson(json)).toBe(true);
   });
 
@@ -184,6 +198,12 @@ describe('validateJson', () => {
     window.alert = jest.fn();
     expect(Library.validateJson(json)).toBe(false);
   });
+
+  test('no sticky', () => {
+    const json = { url: 'url', other_urls: 'other_urls', contents: 'contents' };
+    window.alert = jest.fn();
+    expect(Library.validateJson(json)).toBe(true);
+  });
   /* eslint-enable no-undef */
 });
 
@@ -202,9 +222,9 @@ describe('getRootElement', () => {
 describe('generateTab', () => {
   test('get element', () => {
     document.body.innerHTML = '<div><ul class="horizontal-list"></div>';
-    expect(Library.generateTab('small', 'body-only', 0).divContainer).toBeTruthy();
-    expect(Library.generateTab('small', 'body-only', 0).divTabToolBar).toBeTruthy();
-    expect(Library.generateTab('small', 'body-only', 0).divWebview).toBeTruthy();
+    expect(Library.generateTab('small', 'body-only', 0, false).divContainer).toBeTruthy();
+    expect(Library.generateTab('small', 'body-only', 0, false).divTabToolBar).toBeTruthy();
+    expect(Library.generateTab('small', 'body-only', 0, false).divWebview).toBeTruthy();
   });
 });
 
