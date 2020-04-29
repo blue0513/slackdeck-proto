@@ -62,6 +62,7 @@ You can edit these variables bellow.
 + **width**: Width of each column
   + `small-tab`: recommend to use with `channel-only` or `sidebar-only`
   + `large-tab`: recommend to use with `body-only`
++ **sticky**: Stick the first left column
 
 ## Tips on Use
 
